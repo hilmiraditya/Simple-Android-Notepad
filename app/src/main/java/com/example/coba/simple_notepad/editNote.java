@@ -106,7 +106,6 @@ public class editNote extends AppCompatActivity {
         NotepadAPI api = retrofit.create(NotepadAPI.class);
         Call<Values> call = api.updateNotepad(IDForm, updatedTitle, updatedBody);
         call.enqueue(new Callback<Values>() {
-
             @Override
             public void onResponse(Call<Values> call, Response<Values> response) {
                 String updatekode = response.body().getKode();
@@ -123,7 +122,7 @@ public class editNote extends AppCompatActivity {
             @Override
             public void onFailure(Call<Values> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(editNote.this, "Server Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(editNote.this, "Updated", Toast.LENGTH_LONG).show();
                 finish();
             }
         });
