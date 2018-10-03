@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.coba.simple_notepad.Interfaces.NotepadAPI;
 import com.example.coba.simple_notepad.Model.Values;
+import com.example.coba.simple_notepad.Session.SessionManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,11 +26,14 @@ public class newNote extends AppCompatActivity {
     public ProgressDialog PDialog;
     public String URL = "http://10.0.2.2/retrofit_CRUD/";
     private MainActivity ma;
+    public SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_note);
+
+        sessionManager = new SessionManager(newNote.this);
 
         NoteTitle = findViewById(R.id.NoteTitle);
         NoteBody = findViewById(R.id.NoteBody);
@@ -58,7 +62,7 @@ public class newNote extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         NotepadAPI api = retrofit.create(NotepadAPI.class);
-        Call<Values> call = api.createNotepad(notepad_title, notepad_body);
+        Call<Values> call = api.createNotepad(sessionManager.getterUserId(),notepad_title, notepad_body);
         call.enqueue(new Callback<Values>() {
 
             @Override

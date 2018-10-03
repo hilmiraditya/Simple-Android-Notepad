@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.coba.simple_notepad">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,15 +11,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize">
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity
+            android:name=".editNote"
+            android:label="Edit Note"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".newNote"
+            android:label="@string/new_note_name"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".login"
+            android:label="Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".editNote" android:label="Edit Note" android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".newNote" android:label="@string/new_note_name" android:windowSoftInputMode="adjustResize"></activity>
     </application>
 
 </manifest>

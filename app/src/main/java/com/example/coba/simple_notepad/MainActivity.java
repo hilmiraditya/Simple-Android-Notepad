@@ -1,7 +1,9 @@
 package com.example.coba.simple_notepad;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +27,7 @@ import com.example.coba.simple_notepad.Adapter.RecycleViewAdapter;
 import com.example.coba.simple_notepad.Interfaces.NotepadAPI;
 import com.example.coba.simple_notepad.Model.Notepad;
 import com.example.coba.simple_notepad.Model.Values;
+import com.example.coba.simple_notepad.Session.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,12 +47,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FloatingActionButton NewNoteBtn;
+    private FloatingActionButton NewNoteBtn, LogoutBtn;
     private List<Notepad> notepads = new ArrayList<>();
     private RecycleViewAdapter viewAdapter;
     public String URL = "http://10.0.2.2/retrofit_CRUD/";
     public MainActivity ma;
-
+    public SessionManager sessionManager;
 
     @BindView(R.id.recyclerView) RecyclerView recycleView;
     @BindView(R.id.progressBar) ProgressBar progressBar;
@@ -59,6 +62,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        sessionManager = new SessionManager(MainActivity.this);
+
+        LogoutBtn = findViewById(R.id.LogoutBtn);
+        LogoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sessionManager.Logout();
+                Intent LoginPage = new Intent(MainActivity.this, login.class);
+                startActivity(LoginPage);
+                Toast.makeText(MainActivity.this,"Ter Log Out Bung!",Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
 
         NewNoteBtn = findViewById(R.id.NewNote);
         NewNoteBtn.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(URL).addConverterFactory(GsonConverterFactory.create()).build();
         NotepadAPI api = retrofit.create(NotepadAPI.class);
 
-        Call<Values> call = api.index();
+        Call<Values> call = api.index(sessionManager.getterUserId());
         call.enqueue(new Callback<Values>() {
             @Override
             public void onResponse(Call<Values> call, Response<Values> response) {
